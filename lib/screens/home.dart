@@ -1,3 +1,4 @@
+import 'package:firebase_practice/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 
 class home extends StatelessWidget {
@@ -5,8 +6,6 @@ class home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('home'),
-    );
+    return authenticate();
   }
 }
