@@ -1,27 +1,29 @@
 import 'package:firebase_practice/services/auth.dart';
+import 'package:firebase_practice/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_practice/shared/constants.dart';
-class Register extends StatefulWidget {
 
+class Register extends StatefulWidget {
   final Function toggleView;
-  Register({ required this.toggleView });
+  Register({required this.toggleView});
 
   @override
   _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-
   final AuthService _auth = AuthService();
-    final _formKey=GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   // text field state
   String email = '';
   String password = '';
-  String error='';
+  String error = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  loading
+        ? Loading():Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -43,22 +45,24 @@ class _RegisterState extends State<Register> {
             children: <Widget>[
               SizedBox(height: 20.0),
               TextFormField(
-                decoration:textDecoration,
-                validator: (val)=>val!.isEmpty?'Enter an email':null,
+                decoration: textDecoration,
+                validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() {
-                    email=val.trim();
+                    email = val.trim();
                   });
                 },
               ),
               SizedBox(height: 20.0),
               TextFormField(
-                decoration:textDecoration.copyWith(hintText:'Enter password'),
-                validator: (val)=>val!.length<6?'Enter the password 6 characters long':null,
+                decoration: textDecoration.copyWith(hintText: 'Enter password'),
+                validator: (val) => val!.length < 6
+                    ? 'Enter the password 6 characters long'
+                    : null,
                 obscureText: true,
                 onChanged: (val) {
                   setState(() {
-                    password=val.trim();
+                    password = val.trim();
                   });
                 },
               ),
@@ -70,16 +74,20 @@ class _RegisterState extends State<Register> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    if(_formKey.currentState!.validate()){
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password)  ;
-                      if(result == null) {
+                    if (_formKey.currentState!.validate()) {
+                       setState(() {
+                              loading = true;
+                            });
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
                         setState(() {
-                          error = 'Could not register with those credentials';
+                        error = 'Could not register with those credentials';
+                        loading = false;
                         });
                       }
                     }
-                  }
-              ),
+                  }),
               SizedBox(height: 12.0),
               Text(
                 error,

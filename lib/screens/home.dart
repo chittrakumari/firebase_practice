@@ -1,14 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_practice/authenticate/authenticate.dart';
 import 'package:firebase_practice/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_practice/services/DatabaseService.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_practice/screens/brew_list.dart';
 
 class home extends StatelessWidget {
 
+  final AuthService _auth = AuthService();
 
-  final _auth=new AuthService();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return StreamProvider<QuerySnapshot?>.value(
+      value: DatabaseService().brews,
+      initialData: null,
       child: Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
@@ -25,6 +31,7 @@ class home extends StatelessWidget {
             ),
           ],
         ),
+        body: BrewList(),
       ),
     );
   }
