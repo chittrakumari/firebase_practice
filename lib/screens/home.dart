@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_practice/authenticate/authenticate.dart';
+import 'package:firebase_practice/models/brew.dart';
 import 'package:firebase_practice/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_practice/services/DatabaseService.dart';
@@ -12,7 +13,7 @@ class home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<List<Brew>?>.value(
       value: DatabaseService().brews,
       initialData: null,
       child: Scaffold(
